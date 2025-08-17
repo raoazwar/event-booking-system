@@ -284,6 +284,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ by the Event Booking System Team**
+**Built with ❤️ by the Rao Azwar**
 
 *For questions and support, please open an issue on GitHub.*
