@@ -9,10 +9,16 @@ interface GoogleMapProps {
 }
 
 const GoogleMap: React.FC<GoogleMapProps> = ({ location, eventTitle }) => {
-  // Create Google Maps iframe URL with location search
+  // Get API key from environment variable
+  const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
+  // Create Google Maps iframe URL with location search (only if API key is available)
   const getMapUrl = (location: string) => {
+    if (!GOOGLE_MAPS_API_KEY) {
+      return null; // No API key available
+    }
     const encodedLocation = encodeURIComponent(location);
-    return `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodedLocation}`;
+    return `https://www.google.com/maps/embed/v1/place?key=${GOOGLE_MAPS_API_KEY}&q=${encodedLocation}`;
   };
 
   // Alternative: Use Google Maps search URL (no API key required)
@@ -20,6 +26,8 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ location, eventTitle }) => {
     const encodedLocation = encodeURIComponent(location);
     return `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
   };
+
+  const mapUrl = getMapUrl(location);
 
   return (
     <Card className="w-full">
@@ -33,19 +41,29 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ location, eventTitle }) => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Map iframe */}
-        <div className="relative w-full h-64 rounded-lg overflow-hidden border">
-          <iframe
-            src={getMapUrl(location)}
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title={`Map showing location for ${eventTitle}`}
-          />
-        </div>
+        {/* Map iframe - only show if API key is available */}
+        {mapUrl ? (
+          <div className="relative w-full h-64 rounded-lg overflow-hidden border">
+            <iframe
+              src={mapUrl}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title={`Map showing location for ${eventTitle}`}
+            />
+          </div>
+        ) : (
+          <div className="w-full h-64 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
+            <div className="text-center text-gray-500">
+              <MapPin className="h-12 w-12 mx-auto mb-2 text-gray-400" />
+              <p className="text-sm">Map preview not available</p>
+              <p className="text-xs">Click "Open in Google Maps" to view location</p>
+            </div>
+          </div>
+        )}
         
         {/* Action buttons */}
         <div className="flex flex-col sm:flex-row gap-3">

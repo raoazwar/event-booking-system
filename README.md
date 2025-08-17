@@ -2,6 +2,16 @@
 
 A modern, full-stack event booking platform built with Laravel (Backend) and React (Frontend) featuring Stripe and PayPal payment integrations.
 
+## ⚠️ Security Notice
+
+**IMPORTANT**: This project contains sensitive configuration that should never be committed to version control:
+- API keys (Stripe, PayPal, Google Maps)
+- Database credentials
+- Webhook secrets
+- Environment-specific configuration
+
+Always use `.env` files and ensure they are listed in `.gitignore`.
+
 ## ✨ Features
 
 ### 🎯 Core Functionality
@@ -165,10 +175,19 @@ event-booking-system/
 - Mail server settings
 - Application keys
 
-**Frontend:**
-- API endpoint URLs
+**Frontend (.env):**
+- Google Maps API key: `REACT_APP_GOOGLE_MAPS_API_KEY`
+- API endpoint URLs: `REACT_APP_API_URL`
 - Feature flags
 - Environment-specific settings
+
+### Security Best Practices
+
+1. **Never commit `.env` files** to version control
+2. **Use `.env.example` files** to document required variables
+3. **Restrict API keys** to specific domains/IPs
+4. **Rotate keys regularly** if they get exposed
+5. **Use environment-specific** configuration files
 
 ### Database Configuration
 
